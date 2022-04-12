@@ -48,8 +48,37 @@
 ##### Gulp tasks
 
 - `gulp style` - _Compiles SCSS to css and builds css folder_
+
+```javascript
+function style() {
+  return gulp
+    .src('./src/scss/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./src/css'))
+    .pipe(browserSync.stream());
+}
+```
+
 - `gulp watch` - _Creates BrowserSync server and opens in browser_
+
+```javascript
+function watch() {
+  browserSync.init({
+    server: {
+      baseDir: './src',
+    },
+  });
+  gulp.watch('./src/scss/**/*.scss', style);
+  gulp.watch('./src/*.html').on('change', browserSync.reload);
+  gulp.watch('./src/js/**/*.js').on('change', browserSync.reload);
+}
+```
+
 - `gulp dev` - _Runs both tasks, used to initialise project_
+
+```javascript
+exports.dev = series(style, watch);
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
